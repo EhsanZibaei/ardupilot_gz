@@ -116,7 +116,7 @@ def generate_launch_description():
 
     # Load SDF file.
     sdf_file = os.path.join(
-        pkg_ardupilot_gazebo, "models", "iris_with_gimbal", "model.sdf"
+        pkg_ardupilot_gazebo, "models", "iris_with_gimbal_urdf", "model.urdf"
     )
     with open(sdf_file, "r") as infp:
         robot_desc = infp.read()
@@ -183,18 +183,18 @@ def generate_launch_description():
     return LaunchDescription(
         [
             DeclareLaunchArgument(
-                "use_gz_tf", default_value="true", description="Use Gazebo TF."
+                "use_gz_tf", default_value="false", description="Use Gazebo TF."
             ),
             sitl_dds,
             robot_state_publisher,
             bridge,
-            RegisterEventHandler(
-                OnProcessStart(
-                    target_action=bridge,
-                    on_start=[
-                        topic_tools_tf
-                    ]
-                )
-            ),
+            # RegisterEventHandler(
+            #     OnProcessStart(
+            #         target_action=bridge,
+            #         on_start=[
+            #             topic_tools_tf
+            #         ]
+            #     )
+            # ),
         ]
     )

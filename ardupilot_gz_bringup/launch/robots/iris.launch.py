@@ -131,7 +131,12 @@ def generate_launch_description():
         parameters=[
             {"robot_description": robot_desc},
             {"frame_prefix": ""},
+            {"ignore_fixed_joints": False},
         ],
+        remappings=[
+            ("/tf", "/tf_robot"),          # remap dynamic TF
+            ("/tf_static", "/tf_static")  # optional: static TF
+        ]
     )
 
     # Bridge.
@@ -180,6 +185,12 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration("use_gz_tf")),
     )
 
+    tf_merger = Node(
+            package="ardupilot_gz_bringup",
+            executable="tf_merger.py",
+            name="tf_merger",
+            output="screen"
+        )
     return LaunchDescription(
         [
             DeclareLaunchArgument(
@@ -188,6 +199,7 @@ def generate_launch_description():
             sitl_dds,
             robot_state_publisher,
             bridge,
+            tf_merger,
             # RegisterEventHandler(
             #     OnProcessStart(
             #         target_action=bridge,

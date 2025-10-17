@@ -28,7 +28,11 @@ install(
     rviz/
   DESTINATION share/${PROJECT_NAME}/rviz
 )
-
+# Install Python scripts
+install(PROGRAMS
+  scripts/tf_merger.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 # --------------------------------------------------------------------------- #
 #  Build tests.
 

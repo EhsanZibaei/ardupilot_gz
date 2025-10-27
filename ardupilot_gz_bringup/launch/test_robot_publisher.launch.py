@@ -5,18 +5,18 @@ from ament_index_python.packages import get_package_share_directory
 from pathlib import Path
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from xacro import process_file
 
 def generate_launch_description():
     # Path to your SDF file
-    sdf_file = os.path.join(
+    xacro_file = os.path.join(
         get_package_share_directory('ardupilot_gazebo'),
-        'models/gimbal_small_3d',
-        'model.urdf'
+        'models/iris_with_gimbal',
+        'model.urdf.xacro'
     )
     
-    # Read the SDF file
-    with open(sdf_file, 'r') as f:
-        robot_desc = f.read()
+
+    robot_desc = process_file(xacro_file).toxml()
 
     # Gazebo launch file
     gazebo = IncludeLaunchDescription(

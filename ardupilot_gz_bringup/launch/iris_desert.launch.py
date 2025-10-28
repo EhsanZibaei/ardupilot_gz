@@ -90,7 +90,7 @@ def generate_launch_description():
     rviz = Node(
         package="rviz2",
         executable="rviz2",
-        arguments=["-d", f'{Path(pkg_project_bringup) / "rviz" / "iris.rviz"}'],
+        arguments=["-d", f'{Path(pkg_project_bringup) / "rviz" / "iris2.rviz"}'],
         condition=IfCondition(LaunchConfiguration("rviz")),
     )
 

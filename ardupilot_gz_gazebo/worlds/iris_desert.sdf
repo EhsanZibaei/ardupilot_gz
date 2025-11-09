@@ -69,13 +69,13 @@
 
     <include>
       <uri>model://custom_desert</uri>
-        <pose degrees="true">0 0 0 0 0 363</pose>
+        <pose degrees="true">0 0 0 0 0 0</pose>
     </include>
 
     <include>
       <uri>model://iris_with_gimbal</uri>
       <name>iris</name>
-      <pose degrees="true">-50 50 0.195 0 0 90</pose>
+      <pose degrees="true">-50 50 0.195 0 0 0</pose>
     </include>
 
   </world>

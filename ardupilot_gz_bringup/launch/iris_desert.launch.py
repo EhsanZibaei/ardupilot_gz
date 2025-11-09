@@ -36,7 +36,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, TimerAction
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
@@ -44,7 +44,7 @@ from launch.substitutions import PathJoinSubstitution
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-
+import os
 
 def generate_launch_description():
     """Generate a launch description for a iris quadcopter."""
@@ -90,8 +90,30 @@ def generate_launch_description():
     rviz = Node(
         package="rviz2",
         executable="rviz2",
-        arguments=["-d", f'{Path(pkg_project_bringup) / "rviz" / "iris2.rviz"}'],
+        arguments=["-d", f'{Path(pkg_project_bringup) / "rviz" / "iris3.rviz"}'],
         condition=IfCondition(LaunchConfiguration("rviz")),
+    )
+
+    # YOLO object detection
+    object_detector_pkg = get_package_share_directory('object_detector')
+    object_detection_launch_path = os.path.join(
+        object_detector_pkg, 'launch', 'object_detection_pipeline.launch.py'
+    )
+
+    object_detection_launch_include = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(object_detection_launch_path)
+    )
+
+    ##mission node
+    mission_execution_node = Node(
+        package="ardupilot_dds_tests",
+        executable="copter_object_mission",
+        name="mission_execute"
+    )
+
+    delayed_mission_node = TimerAction(
+        period=110.0,
+        actions=[mission_execution_node]
     )
 
     return LaunchDescription(
@@ -103,5 +125,7 @@ def generate_launch_description():
             gz_sim_gui,
             iris,
             rviz,
+            object_detection_launch_include,
+            delayed_mission_node
         ]
     )
